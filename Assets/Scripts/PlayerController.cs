@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class PlayerBattle : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     public enum State { BattleIn, Attack, BattleOff, Dead, Size }
     [SerializeField] State curState = State.BattleIn;
     private BaseState[] states = new BaseState[(int)State.Size];
 
-
     [SerializeField] PlayerModel playerModel;
+
     [SerializeField] GameObject player;
     private Transform target;
 
@@ -49,8 +49,8 @@ public class PlayerBattle : MonoBehaviour
 
     private class PlayerModel : BaseState
     {
-        public PlayerBattle player;
-        public PlayerModel(PlayerBattle player)
+        public PlayerController player;
+        public PlayerModel(PlayerController player)
         {
             this.player = player;
         }
@@ -58,7 +58,7 @@ public class PlayerBattle : MonoBehaviour
 
     private class BattleInState : PlayerModel
     {
-        public BattleInState(PlayerBattle player) : base(player)
+        public BattleInState(PlayerController player) : base(player)
         {
         }
 
@@ -70,21 +70,21 @@ public class PlayerBattle : MonoBehaviour
 
     private class AttackState : PlayerModel
     {
-        public AttackState(PlayerBattle player) : base(player)
+        public AttackState(PlayerController player) : base(player)
         {
         }
     }
 
     private class BattleOffState : PlayerModel
     {
-        public BattleOffState(PlayerBattle player) : base(player)
+        public BattleOffState(PlayerController player) : base(player)
         {
         }
     }
 
     private class DeadState : PlayerModel
     {
-        public DeadState(PlayerBattle player) : base(player)
+        public DeadState(PlayerController player) : base(player)
         {
         }
     }
