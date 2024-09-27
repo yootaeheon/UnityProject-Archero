@@ -9,12 +9,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] State curState = State.BattleIn;
     private BaseState[] states = new BaseState[(int)State.Size];
 
-    List<GameObject> monster = new List<GameObject>();
+    List<GameObject> monsterList = new List<GameObject>();
 
     [SerializeField] PlayerModel playerModel;
 
     [SerializeField] GameObject player;
-    private Transform target;
+    [SerializeField] Transform monster;
+    [SerializeField] Transform muzzlePoint;
 
     private void Awake()
     {
@@ -27,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        target = GameObject.FindGameObjectWithTag("Monster").transform;
+        monster = GameObject.FindGameObjectWithTag("Monster").transform;
 
         states[(int)State.BattleIn].Enter();
     }
@@ -80,11 +81,13 @@ public class PlayerController : MonoBehaviour
         }
         public override void Update()
         {
-           //레이캐스트를 몬스터리스트에 있는 몬스터들에게 쏜다
+            //레이캐스트를 몬스터리스트에 있는 몬스터들에게 쏜다
 
             //가장 가까운 몬스터를 쳐다보며
 
             //화살 옵젝풀로 생성하여 공격
+            PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);
+            Arrow bullet = instance.GetComponent<Arrow>();
         }
         public override void Exit()
         {
