@@ -82,12 +82,13 @@ public class PlayerController : MonoBehaviour
         public override void Update()
         {
             //레이캐스트를 몬스터리스트에 있는 몬스터들에게 쏜다
-
+            player.SetTarget();
             //가장 가까운 몬스터를 쳐다보며
-
+            //
             //화살 옵젝풀로 생성하여 공격
-           // PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);              //수정필요
-           // Arrow bullet = instance.GetComponent<Arrow>();
+            player.Attack();
+            PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);              //수정필요
+            Arrow bullet = instance.GetComponent<Arrow>();
         }
         public override void Exit()
         {
@@ -116,11 +117,31 @@ public class PlayerController : MonoBehaviour
         {
             //부활 지점을 정하여 부활
             //부활 이펙트
+            player.Respawn();
         }
 
         public override void Exit()
         {
             player.ChangeState(State.BattleIn);
         }
+    }
+
+    private void SetTarget()
+    {
+        Ray arrowRay = new Ray(muzzlePoint.position, monster.position);
+        if (Physics.Raycast(arrowRay, out RaycastHit hit))
+        {
+            Debug.DrawRay(muzzlePoint.position, monster.position * hit.distance, Color.red, 1f);
+        }
+    }
+
+    private void Attack()
+    {
+
+    }
+
+    private void Respawn()
+    {
+        //코루틴으로 시도해보자
     }
 }
