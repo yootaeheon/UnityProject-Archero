@@ -5,11 +5,19 @@ using UnityEngine;
 public class PlayerMover : MonoBehaviour
 {
     [SerializeField] Rigidbody rigid;
-    [SerializeField] float moveSpeed;
+    [SerializeField] Animator playerAnimator;
+    [SerializeField] PlayerModel playerModel;
 
+    
+   
+    [SerializeField] float rate;
+
+    
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
+        playerAnimator = GetComponent<Animator>();
+        
     }
     private void Update()
     {
@@ -21,7 +29,13 @@ public class PlayerMover : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
-        rigid.velocity = new Vector3(x * moveSpeed, 0 , z * moveSpeed);
-        
+        Vector3 dir = new Vector3 (x, 0,z);
+
+        rigid.velocity = dir * playerModel.MoveSpeed;
+        playerAnimator.SetFloat("Speed", playerModel.MoveSpeed * z);
+
+        //rigid.rotation = Quaternion.LookRotation(dir);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 30 * Time.deltaTime);
     }
 }
+
