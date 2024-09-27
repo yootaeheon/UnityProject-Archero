@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     private BaseState[] states = new BaseState[(int)State.Size];
 
     List<GameObject> monsterList = new List<GameObject>();
-
+    [SerializeField] ObjectPool arrowPool;
     [SerializeField] PlayerModel playerModel;
 
     [SerializeField] GameObject player;
@@ -86,8 +86,8 @@ public class PlayerController : MonoBehaviour
             //가장 가까운 몬스터를 쳐다보며
 
             //화살 옵젝풀로 생성하여 공격
-            PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);
-            Arrow bullet = instance.GetComponent<Arrow>();
+           // PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);              //수정필요
+           // Arrow bullet = instance.GetComponent<Arrow>();
         }
         public override void Exit()
         {

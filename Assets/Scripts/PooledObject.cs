@@ -6,8 +6,8 @@ public class PooledObject : MonoBehaviour
     [SerializeField] bool autoRelease;
     [SerializeField] float releaseTime;
 
-    private ObjectPool pool;
-    public ObjectPool Pool { get { return pool; } set { pool = value; } }
+    private ObjectPool arrowPool;
+    public ObjectPool ArrowPool { get { return arrowPool; } set { arrowPool = value; } }
 
     private void OnEnable()
     {
@@ -25,9 +25,9 @@ public class PooledObject : MonoBehaviour
 
     public void Release()
     {
-        if (pool != null)
+        if (arrowPool != null)
         {
-            pool.ReturnPool(this);
+            arrowPool.ReturnPool(this);
         }
         else
         {
