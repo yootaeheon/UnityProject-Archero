@@ -306,9 +306,6 @@ MonoBehaviour:
   rigid: {fileID: 653577272}
   playerAnimator: {fileID: 653577271}
   playerModel: {fileID: 653577277}
-  moveSpeed: 15
-  rotateSpeed: 150
-  rate: 0
 --- !u!143 &653577276
 CharacterController:
   m_ObjectHideFlags: 0
@@ -340,7 +337,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hp: 1000
-  moveSpeed: 15
+  moveSpeed: 5
+  rate: 30
   shootSpeed: 5
   arrowSpeed: 5
 --- !u!1 &698390875

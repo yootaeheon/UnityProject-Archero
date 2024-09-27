@@ -7,11 +7,6 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator playerAnimator;
     [SerializeField] PlayerModel playerModel;
-
-    
-   
-    [SerializeField] float rate;
-
     
     private void Start()
     {
@@ -35,7 +30,7 @@ public class PlayerMover : MonoBehaviour
         playerAnimator.SetFloat("Speed", playerModel.MoveSpeed * z);
 
         //rigid.rotation = Quaternion.LookRotation(dir);
-        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), 30 * Time.deltaTime);
+        transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), playerModel.Rate * Time.deltaTime);
     }
 }
 
