@@ -86,9 +86,8 @@ public class PlayerController : MonoBehaviour
             //가장 가까운 몬스터를 쳐다보며
             //
             //화살 옵젝풀로 생성하여 공격
-            player.Attack();
-            PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);              //수정필요
-            Arrow bullet = instance.GetComponent<Arrow>();
+            player.Fire();
+            
         }
         public override void Exit()
         {
@@ -135,9 +134,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Attack()
+    private void Fire()
     {
-
+        PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);       
+        Arrow arrow = instance.GetComponent<Arrow>();
     }
 
     private void Respawn()
