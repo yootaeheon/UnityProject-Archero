@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.GraphicsBuffer;
 
 public class PlayerController : MonoBehaviour
 {
@@ -9,12 +9,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] State curState = State.BattleIn;
     private BaseState[] states = new BaseState[(int)State.Size];
 
-    List<GameObject> monsterList = new List<GameObject>();
+    private float arrowSpeed;
+    private GameObject monsterList;
+
     [SerializeField] ObjectPool arrowPool;
     [SerializeField] PlayerModel playerModel;
 
     [SerializeField] GameObject player;
-    [SerializeField] Transform monster;
+    
     [SerializeField] Transform muzzlePoint;
 
     private void Awake()
@@ -28,9 +30,11 @@ public class PlayerController : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        monster = GameObject.FindGameObjectWithTag("Monster").transform;
+      
 
         states[(int)State.BattleIn].Enter();
+
+        monsterList.GetComponent<Monster>();
     }
 
     private void Update()
@@ -56,6 +60,7 @@ public class PlayerController : MonoBehaviour
         public PlayerModel(PlayerController player)
         {
             this.player = player;
+
         }
     }
 
@@ -78,16 +83,15 @@ public class PlayerController : MonoBehaviour
     {
         public AttackState(PlayerController player) : base(player)
         {
+
         }
         public override void Update()
         {
-            //레이캐스트를 몬스터리스트에 있는 몬스터들에게 쏜다
+            //레이캐스트를 몬스터리스트에 있는 가장 가까운 몬스터를 쳐다보며 몬스터들에게 쏜다
             player.SetTarget();
-            //가장 가까운 몬스터를 쳐다보며
-            //
+           
             //화살 옵젝풀로 생성하여 공격
             player.Fire();
-            
         }
         public override void Exit()
         {
@@ -127,17 +131,47 @@ public class PlayerController : MonoBehaviour
 
     private void SetTarget()
     {
-        Ray arrowRay = new Ray(muzzlePoint.position, monster.position);
-        if (Physics.Raycast(arrowRay, out RaycastHit hit))
+
+        if (Monster.monsters.Count == 0)
+            return;
+
+        Monster target = Monster.monsters[0];
+        float curDistance = (target.transform.position - player.transform.position).sqrMagnitude;
+        for (int i = 0; i < Monster.monsters.Count; i++)
         {
-            Debug.DrawRay(muzzlePoint.position, monster.position * hit.distance, Color.red, 1f);
+            float distance = (Monster.monsters[i].transform.position - target.transform.position).sqrMagnitude;
+            if (curDistance < distance)
+                continue;
+
+            Ray ray = new Ray(player.transform.transform.position, Monster.monsters[i].transform.position);
+            if (Physics.Raycast(ray, out RaycastHit hit))
+            {
+                if (hit.collider != null)
+                    continue;
+            }
+
+            target = Monster.monsters[i];
         }
+
+
+
+        float x = Input.GetAxis("Horizontal");
+        float z = Input.GetAxis("Vertical");
+
+        Vector3 dir = new Vector3(x, 0, z);
+
+      //  if (dir == Vector3.zero && Monster.monsters != 0)
+      //  {
+      //      transform.LookAt(target.transform);
+      //  }
     }
 
+   
     private void Fire()
     {
-        PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);       
+        PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);
         Arrow arrow = instance.GetComponent<Arrow>();
+            arrow.SetSpeed(arrowSpeed);
     }
 
     private void Respawn()

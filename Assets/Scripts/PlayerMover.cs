@@ -7,6 +7,8 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] Rigidbody rigid;
     [SerializeField] Animator playerAnimator;
     [SerializeField] PlayerModel playerModel;
+
+   
     
     private void Start()
     {
@@ -19,12 +21,17 @@ public class PlayerMover : MonoBehaviour
         Move();
     }
 
-    private void Move()
+    public void Move()
     {
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
         Vector3 dir = new Vector3 (x, 0,z);
+
+        if (dir == Vector3.zero)
+        {
+            return;
+        }
 
         rigid.velocity = dir * playerModel.MoveSpeed;
         playerAnimator.SetFloat("Speed", playerModel.MoveSpeed * z);

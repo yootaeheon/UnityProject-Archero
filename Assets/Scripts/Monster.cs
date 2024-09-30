@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public static List<Monster> monsters = new List<Monster>();
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        monsters.Add(this);
     }
 }
+
