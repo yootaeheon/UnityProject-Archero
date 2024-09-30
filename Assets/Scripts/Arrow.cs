@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class Arrow : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] float speed;
+
+    private void Start()
     {
-        
+        Destroy(gameObject, 5f);
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.Self);
+    }
+
+    public void SetSpeed(float speed)
+    {
+        this.speed = speed;
     }
 }

@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 767840117928550262}
   - component: {fileID: 3300055929138990896}
   m_Layer: 7
-  m_Name: BattleZoneTriiger
+  m_Name: BattleZoneTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -357,6 +357,7 @@ GameObject:
   - component: {fileID: 2751343508913123785}
   - component: {fileID: 2751343508913123784}
   - component: {fileID: 2751343508913123787}
+  - component: {fileID: 346850063222511188}
   m_Layer: 7
   m_Name: Ground
   m_TagString: Untagged
@@ -443,6 +444,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!65 &346850063222511188
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2751343508913123786}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 10, y: 0, z: 10}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &2776033860869589215
 GameObject:
   m_ObjectHideFlags: 0
