@@ -228,6 +228,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &347132544 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3579887968963990953, guid: 6d8ea6649701c4847bf1b650edb37003, type: 3}
+  m_PrefabInstance: {fileID: 2071099479}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &368077500
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,6 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   curState: 0
+  monsterList: {fileID: 2426937800104931349}
   arrowPool: {fileID: 653577279}
   player: {fileID: 653577270}
   muzzlePoint: {fileID: 368077501}
@@ -579,6 +585,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1002982465}
+  - component: {fileID: 1002982466}
   m_Layer: 0
   m_Name: =====Monster=====
   m_TagString: Monster
@@ -604,6 +611,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1002982466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1002982464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e524a7fcec71183468f1902f0142ad20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
 --- !u!1 &1161452073 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3093926256444652871, guid: 31fca51ab4e6ff845b2bc9ba977c49d7, type: 3}
@@ -701,6 +721,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 481092cc15e545d48820e7d078f98942, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1370591474 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3579887968963990953, guid: 6d8ea6649701c4847bf1b650edb37003, type: 3}
+  m_PrefabInstance: {fileID: 1342244859}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1370591475
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370591474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e524a7fcec71183468f1902f0142ad20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
 --- !u!1 &1586699179
 GameObject:
   m_ObjectHideFlags: 0
@@ -799,7 +837,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTransform: {fileID: 653577273}
-  offset: {x: 0, y: 25, z: -20}
+  offset: {x: 0, y: 15, z: -10}
+--- !u!1 &1732021585 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3579887968963990953, guid: 6d8ea6649701c4847bf1b650edb37003, type: 3}
+  m_PrefabInstance: {fileID: 1966866437037604615}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1943510136
 GameObject:
   m_ObjectHideFlags: 0
@@ -893,6 +936,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4243940647657754387, guid: 6d8ea6649701c4847bf1b650edb37003, type: 3}
   m_PrefabInstance: {fileID: 2071099479}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2071099481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347132544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e524a7fcec71183468f1902f0142ad20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
 --- !u!1001 &1966866437037604615
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -959,6 +1015,19 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4243940647657754387, guid: 6d8ea6649701c4847bf1b650edb37003, type: 3}
   m_PrefabInstance: {fileID: 1966866437037604615}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2426937800104931349
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1732021585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e524a7fcec71183468f1902f0142ad20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  monsters: []
 --- !u!1001 &2751343509644803122
 PrefabInstance:
   m_ObjectHideFlags: 0

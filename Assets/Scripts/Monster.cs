@@ -6,9 +6,9 @@ using UnityEngine;
 
 public class Monster : MonoBehaviour
 {
-    public static List<Monster> monsters = new List<Monster>();
+    public List<Monster> monsters = new List<Monster>();
 
-    private void Update()
+    private void Start()
     {
         monsters.Add(this);
     }
