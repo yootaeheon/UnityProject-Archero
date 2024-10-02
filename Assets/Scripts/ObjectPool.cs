@@ -21,7 +21,6 @@ public class ObjectPool : MonoBehaviour
             PooledObject instance = Instantiate(prefab);
             instance.gameObject.SetActive(false);
             instance.ArrowPool = this;
-            instance.transform.parent = transform;
             arrowPool.Push(instance);
         }
     }
@@ -34,12 +33,13 @@ public class ObjectPool : MonoBehaviour
             instance.transform.position = position;
             instance.transform.rotation = rotation;
             instance.gameObject.SetActive(true);
+            instance.ArrowPool = this;
             return instance;
         }
         else
         {
             PooledObject instance = Instantiate(arrowPrefab);
-            instance.ArrowPool = this;
+           
             instance.transform.position = position;
             instance.transform.rotation = rotation;
             return instance;
@@ -48,15 +48,12 @@ public class ObjectPool : MonoBehaviour
 
     public void ReturnPool(PooledObject instance)
     {
-        if (arrowPool.Count < capacity)
+       // if (arrowPool.Count < capacity)
         {
+            Debug.Log("return");
             instance.gameObject.SetActive(false);
-            instance.transform.parent = transform;
             arrowPool.Push(instance);
         }
-        else
-        {
-            Destroy(instance.gameObject);
-        }
+       
     }
 }

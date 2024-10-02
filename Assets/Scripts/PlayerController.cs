@@ -1,28 +1,39 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public enum State { BattleIn, Attack, BattleOut, Dead, Size }
-    [SerializeField] State curState = State.BattleIn;
+    public enum State { Attack, Clear, Dead, Size }
+    [SerializeField] State curState = State.Attack;
     private BaseState[] states = new BaseState[(int)State.Size];
-
+    public Coroutine arrowGetRoutine;
+    public Coroutine arrowFireRoutine;
     private float arrowSpeed;
-    private Monster attackTarget;
-    [SerializeField] Monster monsterList;
+    public GameObject attackTarget;
 
+    [SerializeField] GameObject arrowPrefabGameObject;
+    [SerializeField] MonsterManager monsterManager;
+   
+    [SerializeField] Animator animator;
+    [SerializeField] Transform respawnPos;
+    [SerializeField] PooledObject arrowPrefab;
+    [SerializeField] PooledObject arrowPrefab2;
+    [SerializeField] PooledObject arrowPrefab3;
     [SerializeField] ObjectPool arrowPool;
     [SerializeField] PlayerModel playerModel;
-
+    [SerializeField] PlayerMover playerMover;
     [SerializeField] GameObject player;
 
     [SerializeField] Transform muzzlePoint;
 
-    private Monster target;
+    private GameObject target;
+
+    private static Vector3 attackVec;
     private void Awake()
     {
-        states[(int)State.BattleIn] = new BattleInState(this);
         states[(int)State.Attack] = new AttackState(this);
-        states[(int)State.BattleOut] = new BattleOutState(this);
+        states[(int)State.Clear] = new ClearState(this);
         states[(int)State.Dead] = new DeadState(this);
     }
 
@@ -30,15 +41,15 @@ public class PlayerController : MonoBehaviour
     {
         player = GameObject.FindGameObjectWithTag("Player");
 
+        arrowPool.CreatePool(arrowPrefab, 10, 10);
 
-        states[(int)State.BattleIn].Enter();
+
+        states[(int)State.Attack].Enter();
     }
 
     private void Update()
     {
         states[(int)curState].Update();
-        SetTarget();
-        Fire();
     }
 
     public void ChangeState(State nextState)
@@ -56,54 +67,58 @@ public class PlayerController : MonoBehaviour
     private class PlayerModel : BaseState
     {
         public PlayerController player;
-      
+
         public PlayerModel(PlayerController player)
         {
             this.player = player;
         }
     }
 
-    private class BattleInState : PlayerModel
-    {
-        public BattleInState(PlayerController player) : base(player)
-        {
-        }
-        
-        public override void Exit()
-        {
-            player.ChangeState(State.Attack);
-        }
-    }
-
     private class AttackState : PlayerModel
     {
+        public GameObject attackTarget;
         public AttackState(PlayerController player) : base(player)
         {
-        }
-
-        public override void Update()
-        {
-            //레이캐스트를 몬스터리스트에 있는 가장 가까운 몬스터를 쳐다보며 몬스터들에게 쏜다
-           // player.SetTarget();
-
-            //화살 옵젝풀로 생성하여 공격
-            // player.Fire();
-        }
-        public override void Exit()
-        {
-            player.ChangeState(State.BattleOut);
-        }
-    }
-
-    private class BattleOutState : PlayerModel
-    {
-        public BattleOutState(PlayerController player) : base(player)
-        {
+            this.attackTarget = player.attackTarget;
         }
 
         public override void Enter()
         {
-            //모든 몬스터를 죽였을때 떨어진 골드 모두 캐릭터에게 흡수
+            if (player.playerMover.rigid.velocity.magnitude == 0)
+            {
+               player.arrowFireRoutine = player.StartCoroutine(player.FireRoutine());
+              // player.fireRoutine2 = player.StartCoroutine(player.FireRoutine2());
+               // player.fireRoutine3 = player.StartCoroutine(player.FireRoutine3());
+            }
+           
+               
+        }
+        public override void Update()
+        {
+            Debug.Log("attackState Update 진입");
+            //레이캐스트를 몬스터리스트에 있는 가장 가까운 몬스터를 쳐다보며 몬스터들에게 쏜다
+            player.SetTarget();
+            Debug.Log("SetTarget");
+            
+           //  if (attackTarget == null)
+           //  {
+           //      player.ChangeState(State.Clear);
+           //  }
+        }
+       
+    }
+
+    private class ClearState : PlayerModel
+    {
+        public GameObject attackTarget;
+        public ClearState(PlayerController player) : base(player)
+        {
+            this.attackTarget = player.attackTarget;
+        }
+
+        public override void Enter()
+        {
+           
         }
     }
 
@@ -116,42 +131,56 @@ public class PlayerController : MonoBehaviour
         {
             //부활 지점을 정하여 부활
             //부활 이펙트
-            player.Respawn();
+           // player.Respawn();
         }
 
-        public override void Exit()
+        public override void Update()
         {
-            player.ChangeState(State.BattleIn);
+            player.ChangeState(State.Attack);
         }
     }
 
     private void SetTarget()
     {
-
-        if (monsterList.monsters.Count == 0)
+       
+        if (MonsterManager.Instance.monsters.Count == 0)
             return;
 
-        Monster target = monsterList.monsters[0];
-        float curDistance = (target.transform.position - player.transform.position).sqrMagnitude;
-        for (int i = 0; i < monsterList.monsters.Count; i++)
+        GameObject target;
+
+        if (attackTarget == null)
         {
-            float distance = (monsterList.monsters[i].transform.position - target.transform.position).sqrMagnitude;
-            if (curDistance < distance)
-                continue;
-
-            Ray ray = new Ray(player.transform.transform.position, monsterList.monsters[i].transform.position);
-            if (Physics.Raycast(ray, out RaycastHit hit))
-            {
-                if (hit.collider != null)
-                    continue;
-            }
-
-            target = monsterList.monsters[i];
-
-            attackTarget = target;
+            target = MonsterManager.Instance.monsters[0];
+        }
+        else
+        {
+            target = attackTarget;
         }
 
-        player.transform.LookAt(target.transform.position);
+       
+        float curDistance = (target.transform.position - player.transform.position).sqrMagnitude;
+        for (int i = 0; i < MonsterManager.Instance.monsters.Count; i++)
+        {
+            float distance = (MonsterManager.Instance.monsters[i].transform.position - player.transform.position).sqrMagnitude;
+            if (curDistance > distance)
+            {
+                target = MonsterManager.Instance.monsters[i];
+
+                attackTarget = target;
+                Debug.Log(attackTarget.name);
+
+                curDistance = distance;
+            }
+        }
+        if (attackTarget != null)
+        {
+            curDistance = (attackTarget.transform.position - player.transform.position).sqrMagnitude;
+        }
+
+        if (curDistance > 250f)
+        {
+            attackTarget = null;
+        }
     }
 
 
@@ -160,6 +189,9 @@ public class PlayerController : MonoBehaviour
         if (attackTarget == null)
             return;
 
+        player.transform.LookAt(attackTarget.transform.position);
+
+       
         PooledObject instance = arrowPool.GetPool(muzzlePoint.position, muzzlePoint.rotation);
         Arrow arrow = instance.GetComponent<Arrow>();
         arrow.SetSpeed(arrowSpeed);
@@ -167,8 +199,43 @@ public class PlayerController : MonoBehaviour
         Debug.Log("fire");
     }
 
-    private void Respawn()
+
+    WaitForSeconds fireDelay = new WaitForSeconds(1f);
+    IEnumerator FireRoutine() //기본 화살 
     {
-        //코루틴으로 시도해보자
+        while (true)
+        {
+            Fire();
+            yield return fireDelay;
+            Debug.Log("fireCoroutine start");
+        }
+    }
+    void StopFireCoroutine()
+    {
+        arrowFireRoutine = null;
+    }
+
+
+    Coroutine fireRoutine2; //double shot
+    IEnumerator FireRoutine2()
+    {
+        while (true)
+        {
+            Fire();
+            yield return fireDelay;
+            Debug.Log("fireCoroutine2 start");
+        }
+    }
+
+    Coroutine fireRoutine3;  //multy shot
+    IEnumerator FireRoutine3()
+    {
+        while (true)
+        {
+            Fire();
+            yield return fireDelay;
+            Debug.Log("fireCoroutine2 start");
+        }
     }
 }
+

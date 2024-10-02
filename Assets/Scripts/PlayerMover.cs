@@ -4,12 +4,10 @@ using UnityEngine;
 
 public class PlayerMover : MonoBehaviour
 {
-    [SerializeField] Rigidbody rigid;
+    [SerializeField] public Rigidbody rigid;
     [SerializeField] Animator playerAnimator;
     [SerializeField] PlayerModel playerModel;
 
-   
-    
     private void Start()
     {
         rigid = GetComponent<Rigidbody>();
@@ -33,11 +31,20 @@ public class PlayerMover : MonoBehaviour
             return;
         }
 
-        rigid.velocity = dir * playerModel.MoveSpeed;
-        playerAnimator.SetFloat("Speed", playerModel.MoveSpeed * z);
+        if (dir.sqrMagnitude > 1)
+        {
+            dir.Normalize ();
+        }
 
+        rigid.velocity = dir * playerModel.MoveSpeed;
+        
+        
+        playerAnimator.SetFloat("Speed", Mathf.Abs(playerModel.MoveSpeed) * dir.sqrMagnitude);
+
+      
         //rigid.rotation = Quaternion.LookRotation(dir);
         transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.LookRotation(dir), playerModel.Rate * Time.deltaTime);
+        
     }
 }
 

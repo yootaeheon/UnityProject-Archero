@@ -3,14 +3,28 @@ using System.Collections.Generic;
 using System.Net;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Monster : MonoBehaviour
 {
-    public List<Monster> monsters = new List<Monster>();
+    [SerializeField] GameObject arrowPrefab; 
+    [SerializeField] float curHp;
+    [SerializeField] float maxHp;
 
     private void Start()
     {
-        monsters.Add(this);
+        curHp = maxHp;
+    }
+
+    public void TakeHit(int damage)
+    {
+        curHp -= damage;
+        if (curHp <= 0)
+        {
+            curHp = 0;
+            Destroy(gameObject);
+        }
     }
 }
+    
 
